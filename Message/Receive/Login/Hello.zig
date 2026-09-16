@@ -1,6 +1,7 @@
 const std = @import("std");
 const Stream = @import("../../../Core/Byte/Stream.zig").Stream;
 const HelloReply = @import("../../Transmit/Login/Hello.zig");
+const Economy = @import("../../../Game/Economy.zig");
 
 pub const Hello = struct {
     stream: Stream,
@@ -24,6 +25,11 @@ pub const Hello = struct {
     }
 
     pub fn process(self: *Hello) !void {
+        // Create a local/offline test player with the maximum test economy.
+        // This does not connect to or modify any production service.
+        var player = Economy.createMaxPlayer();
+        player.debugPrint();
+
         var reply = HelloReply.Hello.init(self.stream.allocator, self.conn, self.io);
         defer reply.deinit();
         try reply.send();
