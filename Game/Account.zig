@@ -13,20 +13,17 @@ pub const Account = struct {
         return .{};
     }
 
-    pub fn save(self: *const Account) !void {
-        try std.fs.cwd().makePath("Game/data");
-        var file = try std.fs.cwd().createFile(
-            "Game/data/player.txt",
-            .{ .truncate = true },
-        );
-        defer file.close();
+    pub fn save(self: *const Account, io: std.Io) !void {
+        const dir = std.Io.Dir.cwd();
+        try dir.createDirPath(io, "Game/data");
+        const file = try dir.createFile(io, "Game/data/player.txt", .{ .truncate = true });
+        defer file.close(io);
 
         var buf: [256]u8 = undefined;
-        const text = try std.fmt.bufPrint(
-            &buf,
+        const text = try std.fmt.bufPrint(&buf,
             "id={d}\nmoney={d}\ndiamonds={d}\nwheat={d}\n",
             .{ self.id, self.money, self.diamonds, self.wheat },
         );
-        try file.writeAll(text);
+        try file.writeStreamingAll(io, text);
     }
 };
