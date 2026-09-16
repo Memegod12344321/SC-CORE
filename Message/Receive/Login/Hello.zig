@@ -27,7 +27,7 @@ pub const Hello = struct {
     pub fn process(self: *Hello) !void {
         // Local/offline test account only. No production service is contacted.
         var player = Economy.createMaxPlayer();
-        try player.save();
+        try player.save(self.io);
         player.debugPrint();
 
         var reply = HelloReply.Hello.init(self.stream.allocator, self.conn, self.io);
