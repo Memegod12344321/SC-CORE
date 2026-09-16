@@ -1,31 +1,28 @@
 const std = @import("std");
+const Account = @import("Account.zig").Account;
 
-/// Local/offline test economy. This is intentionally separate from the
-/// existing protocol implementation until the Hay Day message schema is
-/// implemented.
 pub const TestPlayer = struct {
-    pub const max_money: u64 = 2_147_483_647;
-    pub const max_diamonds: u64 = 2_147_483_647;
-
-    money: u64 = max_money;
-    diamonds: u64 = max_diamonds;
+    account: Account,
 
     pub fn initMax() TestPlayer {
-        return .{
-            .money = max_money,
-            .diamonds = max_diamonds,
-        };
+        return .{ .account = Account.maxTest() };
     }
 
     pub fn resetMax(self: *TestPlayer) void {
-        self.money = max_money;
-        self.diamonds = max_diamonds;
+        self.account.money = Account.max_money;
+        self.account.diamonds = Account.max_diamonds;
+    }
+
+    pub fn save(self: *const TestPlayer) !void {
+        try self.account.save();
     }
 
     pub fn debugPrint(self: *const TestPlayer) void {
-        std.debug.print("[LOCAL TEST] money={d} diamonds={d}\n", .{
-            self.money,
-            self.diamonds,
+        std.debug.print("[LOCAL TEST] id={d} money={d} diamonds={d} wheat={d}\n", .{
+            self.account.id,
+            self.account.money,
+            self.account.diamonds,
+            self.account.wheat,
         });
     }
 };
