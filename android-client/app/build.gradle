@@ -1,13 +1,13 @@
 plugins { id 'com.android.application' }
 
 android {
-    namespace 'com.sc_core.testclient'
+    namespace 'com.sc_core.localtest'
     compileSdk 35
     defaultConfig {
-        applicationId 'com.sc_core.testclient'
+        applicationId 'com.sc_core.localtest'
         minSdk 23
         targetSdk 35
-        versionCode 1
-        versionName '1.0'
+        versionCode 2
+        versionName '1.1'
     }
 }
