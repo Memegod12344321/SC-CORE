@@ -1,0 +1,19 @@
+<!doctype html>
+<html><head><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><title>FarmVR</title>
+<style>
+html,body{margin:0;height:100%;overflow:hidden;background:#8fd06b;font-family:system-ui;color:#fff;touch-action:none}
+#game{width:100vw;height:100vh;display:block} #hud{position:absolute;top:12px;left:12px;right:12px;display:flex;justify-content:space-between;gap:8px;pointer-events:none}
+.box{background:#fff;color:#4b3828;border-radius:14px;padding:9px 13px;font-weight:800;box-shadow:0 3px 10px #0003}
+#help{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);background:#fff;color:#4b3828;padding:10px 16px;border-radius:20px;font-weight:700}
+</style></head><body><canvas id="game"></canvas><div id="hud"><div class="box">🌾 FarmVR</div><div class="box">🪙 <span id="coins">250</span></div></div><div id="help">Tap a field to plant • tap again to harvest</div>
+<script>
+const c=document.getElementById('game'),x=c.getContext('2d'),coinsEl=document.getElementById('coins');let coins=250,plots=Array.from({length:12},()=>0),cursor={x:0,y:0};
+function resize(){c.width=innerWidth*devicePixelRatio;c.height=innerHeight*devicePixelRatio;x.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0)}addEventListener('resize',resize);resize();
+function draw(){let w=innerWidth,h=innerHeight;x.clearRect(0,0,w,h);x.fillStyle='#9bd875';x.fillRect(0,0,w,h);x.fillStyle='#74b553';x.fillRect(0,h*.48,w,h*.52);
+x.fillStyle='#c34e38';x.fillRect(w*.05,h*.27,w*.19,h*.28);x.fillStyle='#7b4635';x.beginPath();x.moveTo(w*.02,h*.27);x.lineTo(w*.145,h*.11);x.lineTo(w*.28,h*.27);x.fill();x.fillStyle='#6e4535';x.fillRect(w*.125,h*.38,w*.045,h*.17);
+x.fillStyle='#78a84e';x.beginPath();x.arc(w*.82,h*.25,62,0,7);x.fill();x.fillStyle='#79502f';x.fillRect(w*.805,h*.29,w*.03,h*.25);
+for(let i=0;i<12;i++){let px=w*(.37+(i%4)*.105),py=h*(.57+Math.floor(i/4)*.105);x.fillStyle='#9b6b3e';x.fillRect(px-31,py-24,62,48);if(plots[i]===0){x.fillStyle='#6f492d';x.fillRect(px-23,py-5,46,10)}else if(plots[i]===1){x.fillStyle='#67a83d';x.beginPath();x.arc(px,py,15,0,7);x.fill()}else{x.fillStyle='#f4c33f';x.beginPath();x.arc(px,py,19,0,7);x.fill();x.fillStyle='#d89e26';x.beginPath();x.arc(px-7,py-4,5,0,7);x.fill()}}
+if(cursor.x){x.strokeStyle='#fff';x.lineWidth=4;x.beginPath();x.arc(cursor.x,cursor.y,18,0,7);x.stroke()}requestAnimationFrame(draw)}draw();
+c.addEventListener('pointermove',e=>{cursor={x:e.clientX,y:e.clientY}});
+c.addEventListener('pointerdown',e=>{cursor={x:e.clientX,y:e.clientY};let w=innerWidth,h=innerHeight;for(let i=0;i<12;i++){let px=w*(.37+(i%4)*.105),py=h*(.57+Math.floor(i/4)*.105);if(Math.abs(e.clientX-px)<35&&Math.abs(e.clientY-py)<32){if(plots[i]===0){plots[i]=1;coins=Math.max(0,coins-5)}else if(plots[i]===1){plots[i]=2}else{plots[i]=0;coins+=20}coinsEl.textContent=coins;break}}});
+</script></body></html>
