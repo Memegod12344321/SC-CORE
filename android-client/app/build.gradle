@@ -1,13 +1,19 @@
 plugins { id 'com.android.application' }
 
 android {
-    namespace 'com.sc_core.localtest'
+    namespace 'com.sc_core.seuss'
     compileSdk 35
     defaultConfig {
-        applicationId 'com.sc_core.localtest'
+        applicationId 'com.sc_core.seuss'
         minSdk 23
         targetSdk 35
-        versionCode 2
-        versionName '1.1'
+        versionCode 3
+        versionName 'Seuss Full 1.0'
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            debuggable false
+        }
     }
 }
